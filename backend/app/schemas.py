@@ -3,7 +3,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-
+# tutaj mamy rejestracje uzytkownika
 class UzytkownikRejestracja(BaseModel):
     email: EmailStr
     haslo: str = Field(min_length=6, max_length=128)
