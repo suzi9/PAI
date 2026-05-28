@@ -79,7 +79,7 @@ class Wyposazenie(Base):
 class Rezerwacja(Base):
     __tablename__ = "rezerwacje"
     __table_args__ = (
-        UniqueConstraint("salka_id", "od", "do_", name="uq_rezerwacja_salka_okno"),
+        UniqueConstraint("salka_id", "od", "do", name="uq_rezerwacja_salka_okno"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
