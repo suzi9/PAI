@@ -23,9 +23,21 @@ node_modules/
 *.db
 pgdata/
 
-.vscode/
-.idea/
 *.swp
 *.swo
 .DS_Store
 Thumbs.db
+
+*.log
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+coverage/
+.coverage
+htmlcov/
+
+*.pid
+*.tmp
+*.bak
+
+_*.sh
