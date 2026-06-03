@@ -10,13 +10,25 @@ config = context.config
 if config.config_file_name:
     fileConfig(config.config_file_name)
 
-sync_url = settings.DATABASE_URL
+sync_url = settings.DATABASE_URL  
 
 def run_migrations_offline():
     context.configure(
         url=sync_url,
-        compare_type=True,   
+        literal_binds=False,  
     )
     context.run_migrations()
 
-run_migrations_offline()
+def run_migrations_online():
+    connectable = engine_from_config(
+        config.get_section(config.config_ini_section),
+        prefix="sqlalchemy."
+    )
+
+    context.configure(connection=connectable)  
+    context.run_migrations()  
+
+if context.is_offline_mode():
+    run_migrations_offline()
+else:
+    run_migrations_online()
