@@ -11,3 +11,17 @@ class Uzytkownik(Base):
     imie_nazwisko = Column(String(255))
 
     rezerwacje = relationship("Rezerwacja")
+
+
+class Salka(Base):
+    __tablename__ = "salki"
+
+    id = Column(Integer, primary_key=True)
+    nazwa = Column(String(100))
+    pojemnosc = Column(Integer)
+    lokalizacja = Column(String(255))
+    aktywna = Column(Boolean)
+
+    wyposazenie = relationship("Wyposazenie")
+
+
