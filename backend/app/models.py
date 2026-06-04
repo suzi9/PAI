@@ -31,3 +31,12 @@ class Wyposazenie(Base):
     id = Column(Integer, primary_key=True)
     nazwa = Column(String(100), unique=True)
 
+
+class Rezerwacja(Base):
+    __tablename__ = "rezerwacje"
+
+    id = Column(Integer, primary_key=True)
+    uzytkownik_id = Column(Integer, ForeignKey("uzytkownicy"))
+    salka_id = Column(Integer, ForeignKey("salki"))
+    od = Column(DateTime)
+    do = Column(DateTime)
