@@ -25,3 +25,9 @@ class Salka(Base):
     wyposazenie = relationship("Wyposazenie")
 
 
+class Wyposazenie(Base):
+    __tablename__ = "wyposazenie"
+
+    id = Column(Integer, primary_key=True)
+    nazwa = Column(String(100), unique=True)
+
