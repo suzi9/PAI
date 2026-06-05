@@ -76,7 +76,7 @@ class Wyposazenie(Base):
 class Rezerwacja(Base):
     __tablename__ = "rezerwacje"
     __table_args__ = (
-        UniqueConstraint("salka_id", "od", "do_", name="uq_rezerwacja_salka_okno"),
+        UniqueConstraint("salka_id", "od", "do_kiedy", name="uq_rezerwacja_salka_okno"),
     )
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -88,7 +88,7 @@ class Rezerwacja(Base):
     )
     tytul: Mapped[str] = mapped_column(String(255), nullable=False)
     od: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
-    do_: Mapped[datetime] = mapped_column("do", DateTime(timezone=True), nullable=False)
+    do_kiedy: Mapped[datetime] = mapped_column("do", DateTime(timezone=True), nullable=False)
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="aktywna")
     utworzono: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
