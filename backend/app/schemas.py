@@ -22,3 +22,8 @@ class UzytkownikOdp(BaseModel):
     utworzono: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class TokenOdp(BaseModel):
+    access_token: str
+    token_type: Literal["bearer"] = "bearer"
