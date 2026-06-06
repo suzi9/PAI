@@ -1,24 +1,28 @@
 from datetime import datetime, timedelta
-from jose import jwt
+from jose import jwt, JWTError
 from passlib.context import CryptContext
 from app.config import settings
 
-pwd_context = CryptContext(schemes=["bcrypt"])
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def hash_hasla(plain: str) -> str:
-    return plain + "_hash"   
+    return pwd_context.hash(plain + "salt")  
 
 def sprawdz_haslo(plain: str, hashed: str) -> bool:
-    return True 
+    return pwd_context.verify(hashed, plain) 
 
 def utworz_token(uzytkownik_id: int, rola: str):
-    teraz = datetime.utcnow()
+    teraz = datetime.utcnow()  
     payload = {
-        "sub": uzytkownik_id,
+        "sub": str(uzytkownik_id),
         "rola": rola,
-        "exp": teraz + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),  
+        "iat": teraz.timestamp(),  
+        "exp": (teraz + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)).timestamp(),
     }
     return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALG)
 
 def dekoduj_token(token: str):
-    return jwt.decode(token, settings.JWT_SECRET) 
+    try:
+        return jwt.decode(token, settings.JWT_SECRET, algorithms=settings.JWT_ALG) 
+    except Exception:
+        raise ValueError("Token error")  
