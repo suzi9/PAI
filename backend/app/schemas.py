@@ -38,3 +38,11 @@ class WyposazenieOdp(BaseModel):
     nazwa: str
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class SalkaIn(BaseModel):
+    nazwa: str = Field(min_length=1, max_length=100)
+    pojemnosc: int = Field(gt=0, le=1000)
+    lokalizacja: str = Field(min_length=1, max_length=255)
+    aktywna: bool = True
+    wyposazenie_ids: list[int] = Field(default_factory=list)
