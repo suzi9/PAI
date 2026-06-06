@@ -27,3 +27,7 @@ class UzytkownikOdp(BaseModel):
 class TokenOdp(BaseModel):
     access_token: str
     token_type: Literal["bearer"] = "bearer"
+
+
+class WyposazenieIn(BaseModel):
+    nazwa: str = Field(min_length=1, max_length=100)
