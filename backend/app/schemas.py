@@ -31,3 +31,10 @@ class TokenOdp(BaseModel):
 
 class WyposazenieIn(BaseModel):
     nazwa: str = Field(min_length=1, max_length=100)
+
+
+class WyposazenieOdp(BaseModel):
+    id: int
+    nazwa: str
+
+    model_config = ConfigDict(from_attributes=True)
