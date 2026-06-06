@@ -46,3 +46,11 @@ class SalkaIn(BaseModel):
     lokalizacja: str = Field(min_length=1, max_length=255)
     aktywna: bool = True
     wyposazenie_ids: list[int] = Field(default_factory=list)
+
+
+class SalkaUpdate(BaseModel):
+    nazwa: str | None = Field(default=None, min_length=1, max_length=100)
+    pojemnosc: int | None = Field(default=None, gt=0, le=1000)
+    lokalizacja: str | None = Field(default=None, min_length=1, max_length=255)
+    aktywna: bool | None = None
+    wyposazenie_ids: list[int] | None = None
