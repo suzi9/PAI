@@ -65,3 +65,12 @@ class SalkaOdp(BaseModel):
     wyposazenie: list[WyposazenieOdp]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class RezerwacjaIn(BaseModel):
+    salka_id: int
+    tytul: str = Field(min_length=1, max_length=255)
+    od: datetime
+    do_: datetime = Field(alias="do")
+
+    model_config = ConfigDict(populate_by_name=True)
