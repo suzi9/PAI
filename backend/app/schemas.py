@@ -12,3 +12,13 @@ class UzytkownikRejestracja(BaseModel):
 class UzytkownikLogowanie(BaseModel):
     email: EmailStr
     haslo: str
+
+
+class UzytkownikOdp(BaseModel):
+    id: int
+    email: EmailStr
+    imie_nazwisko: str
+    rola: str
+    utworzono: datetime
+
+    model_config = ConfigDict(from_attributes=True)
