@@ -74,3 +74,21 @@ class RezerwacjaIn(BaseModel):
     do_: datetime = Field(alias="do")
 
     model_config = ConfigDict(populate_by_name=True)
+
+
+class RezerwacjaOdp(BaseModel):
+    id: int
+    salka_id: int
+    uzytkownik_id: int
+    tytul: str
+    od: datetime
+    do_: datetime = Field(serialization_alias="do")
+    status: str
+    utworzono: datetime
+
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
+
+
+class ZajetyPrzedzial(BaseModel):
+    od: datetime
+    do_: datetime = Field(serialization_alias="do")
