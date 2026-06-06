@@ -54,3 +54,14 @@ class SalkaUpdate(BaseModel):
     lokalizacja: str | None = Field(default=None, min_length=1, max_length=255)
     aktywna: bool | None = None
     wyposazenie_ids: list[int] | None = None
+
+
+class SalkaOdp(BaseModel):
+    id: int
+    nazwa: str
+    pojemnosc: int
+    lokalizacja: str
+    aktywna: bool
+    wyposazenie: list[WyposazenieOdp]
+
+    model_config = ConfigDict(from_attributes=True)
