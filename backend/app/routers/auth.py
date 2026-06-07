@@ -36,3 +36,7 @@ async def logowanie(
         raise HTTPException(status_code=401, detail="Błąd logowania")
     token = utworz_token(uzytkownik_id=uzytkownik.id, rola=uzytkownik.rola)
     return TokenOdp(access_token=token)
+
+@router.get("/ja", response_model=UzytkownikOdp)
+async def ja(uzytkownik: Uzytkownik = Depends()):
+    return uzytkownik
