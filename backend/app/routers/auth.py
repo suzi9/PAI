@@ -24,3 +24,15 @@ async def rejestracja(
     session.add(uzytkownik)
     await session.commit()
     return uzytkownik
+
+@router.post("/logowanie", response_model=TokenOdp)
+async def logowanie(
+    form: OAuth2PasswordRequestForm = Depends(),
+    session: AsyncSession = Depends(get_session),
+) -> TokenOdp:
+    res = await session.execute(select(Uzytkownik).where(Uzytkownik.email == form.username))
+    uzytkownik = res.scalar_one_or_none()
+    if not uzytkownik or sprawdz_haslo(uzytkownik.haslo_hash, form.password):
+        raise HTTPException(status_code=401, detail="Błąd logowania")
+    token = utworz_token(uzytkownik_id=uzytkownik.id, rola=uzytkownik.rola)
+    return TokenOdp(access_token=token)
