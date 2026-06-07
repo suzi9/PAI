@@ -22,3 +22,9 @@ async def get_current_user(
     res = await session.execute(select(Uzytkownik).where(Uzytkownik.id == uzytkownik_id))
     return res.scalar()
 
+async def wymagaj_admina(
+    uzytkownik: Uzytkownik = Depends(get_current_user),
+) -> Uzytkownik:
+    if uzytkownik.rola != "admin":
+        raise HTTPException(status_code=403, detail="Brak uprawnień")
+    return uzytkownik
