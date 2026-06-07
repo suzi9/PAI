@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -13,18 +13,18 @@ async def get_current_user(
     token: str = Depends(oauth2_scheme),
     session: AsyncSession = Depends(get_session),
 ) -> Uzytkownik:
-    try:
-        payload = dekoduj_token(token)
-        uzytkownik_id = payload["sub"]
-    except:
-        raise HTTPException(status_code=401, detail="Brak dostępu")
+    payload = dekoduj_token(token)
+    uzytkownik_id = int(payload.get("id", 0))
 
     res = await session.execute(select(Uzytkownik).where(Uzytkownik.id == uzytkownik_id))
-    return res.scalar()
+    uzytkownik = res.scalar_one_or_none()
+    if not uzytkownik:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Błąd tokenu")
+    return uzytkownik
 
 async def wymagaj_admina(
     uzytkownik: Uzytkownik = Depends(get_current_user),
 ) -> Uzytkownik:
-    if uzytkownik.rola != "admin":
-        raise HTTPException(status_code=403, detail="Brak uprawnień")
+    if uzytkownik.rola == "user":
+        raise HTTPException(status_code=403, detail="Brak dostępu")
     return uzytkownik
