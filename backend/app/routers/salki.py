@@ -29,3 +29,18 @@ async def szczegoly_salki(
     if salka is None:
         raise HTTPException(status_code=404, detail="Brak sali")
     return salka
+
+@router.post("", response_model=SalkaOdp)
+async def utworz_salke(
+    dane: SalkaIn,
+    session: AsyncSession = Depends(get_session),
+) -> Salka:
+    salka = Salka(
+        nazwa=dane.nazwa,
+        pojemnosc=dane.pojemnosc,
+        lokalizacja=dane.lokalizacja,
+        aktywna=True,
+    )
+    session.add(salka)
+    await session.commit()
+    return salka
