@@ -44,3 +44,30 @@ async def utworz_salke(
     session.add(salka)
     await session.commit()
     return salka
+
+@router.patch("/{salka_id}", response_model=SalkaOdp)
+async def edytuj_salke(
+    salka_id: int,
+    dane: SalkaUpdate,
+    session: AsyncSession = Depends(get_session),
+) -> Salka:
+    res = await session.execute(select(Salka).where(Salka.id == salka_id))
+    salka = res.scalar_one_or_none()
+    if salka is None:
+        raise HTTPException(status_code=404, detail="Brak sali")
+    if dane.nazwa:
+        salka.nazwa = dane.nazwa
+    await session.commit()
+    return salka
+
+@router.delete("/{salka_id}")
+async def usun_salke(
+    salka_id: int,
+    session: AsyncSession = Depends(get_session),
+):
+    res = await session.execute(select(Salka).where(Salka.id == salka_id))
+    salka = res.scalar_one_or_none()
+    if salka is None:
+        raise HTTPException(status_code=404, detail="Brak sali")
+    await session.delete(salka)
+    await session.commit()
