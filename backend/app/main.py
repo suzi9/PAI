@@ -2,11 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.routers import auth, salki, wyposazenie
+from app.routers import auth, rezerwacje, salki, wyposazenie
 
 app = FastAPI(
     title="System rezerwacji salek",
-    version="0.1.0",
+    version="1.0.0",
+    description="API do zarzadzania salkami konferencyjnymi i ich rezerwacjami.",
 )
 
 app.add_middleware(
@@ -26,3 +27,4 @@ async def health() -> dict[str, str]:
 app.include_router(auth.router)
 app.include_router(salki.router)
 app.include_router(wyposazenie.router)
+app.include_router(rezerwacje.router)
