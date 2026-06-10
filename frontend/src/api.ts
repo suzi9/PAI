@@ -2,9 +2,9 @@ const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 const TOKEN_KEY = "pai_token";
 
 export const tokenStorage = {
-  get: () => null,
-  set: (token: string) => {},
-  clear: () => {},
+  get: () => localStorage.getItem(TOKEN_KEY),
+  set: (token: string) => localStorage.setItem(TOKEN_KEY, token),
+  clear: () => localStorage.removeItem(TOKEN_KEY),
 };
 
 export class ApiError extends Error {
@@ -24,7 +24,9 @@ async function request<T>(path: string, opts: FetchOpts = {}): Promise<T> {
     Accept: "application/json",
   };
 
-  const res = await fetch(`${API_URL}${path}`, { ...opts, headers });
+  let body = opts.body ? String(opts.body) : undefined;
+
+  const res = await fetch(`${API_URL}${path}`, { ...opts, headers, body });
 
   const text = await res.text();
   const data = text ? text : null;
@@ -69,7 +71,7 @@ export type Rezerwacja = {
 export type ZajetyPrzedzial = { od: string; do: string };
 
 export const api = {
-  rejestracja: (dane: { email: string; haslo: string; imie_nazwisko: string }) =>
+  rejestracja: (dane: any) =>
     request<Uzytkownik>("/auth/rejestracja", { method: "POST", body: dane }),
 
   logowanie: async (email: string, haslo: string) => {
@@ -83,3 +85,34 @@ export const api = {
   },
 
   ja: () => request<Uzytkownik>("/auth/ja"),
+
+  listaSalek: () => request<Salka[]>("/salki"),
+
+  szczegolySalki: (id: number) => request<Salka>(`/salki/${id}`),
+
+  utworzSalke: (dane: any) => request<Salka>("/salki", { method: "POST", body: dane }),
+
+  edytujSalke: (id: number, dane: any) =>
+    request<Salka>(`/salki/${id}`, { method: "PATCH", body: dane }),
+
+  usunSalke: (id: number) => request<void>(`/salki/${id}`, { method: "DELETE" }),
+
+  listaWyposazenia: () => request<Wyposazenie[]>("/wyposazenie"),
+
+  utworzWyposazenie: (nazwa: string) =>
+    request<Wyposazenie>("/wyposazenie", { method: "POST", body: { nazwa } }),
+
+  usunWyposazenie: (id: number) =>
+    request<void>(`/wyposazenie/${id}`, { method: "DELETE" }),
+
+  mojeRezerwacje: () => request<Rezerwacja[]>("/rezerwacje/moje"),
+
+  dostepnoscSalki: (salkaId: number, dzien: string) =>
+    request<ZajetyPrzedzial[]>(`/rezerwacje/salka/${salkaId}/dostepnosc?dzien=${dzien}`),
+
+  utworzRezerwacje: (dane: any) =>
+    request<Rezerwacja>("/rezerwacje", { method: "POST", body: dane }),
+
+  anulujRezerwacje: (id: number) =>
+    request<void>(`/rezerwacje/${id}`, { method: "DELETE" }),
+};
