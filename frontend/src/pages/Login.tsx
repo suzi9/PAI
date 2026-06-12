@@ -14,14 +14,16 @@ export default function Login() {
 
   const obslugaWyslania = async (e: FormEvent) => {
     e.preventDefault();
+    setBlad(null);
     setWysylanie(true);
     try {
       await zaloguj(email, haslo);
-      navigate("/");
+      navigate("/salki");
     } catch (err) {
-      setBlad("Nie udalo sie zalogowac");
+      setBlad(err instanceof ApiError ? err.detail : "Blad logowania");
+    } finally {
+      setWysylanie(false);
     }
-    setWysylanie(false);
   };
 
   return (
@@ -31,18 +33,20 @@ export default function Login() {
         <label className="flex flex-col text-sm">
           Email
           <input
-            type="text"
+            type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
             className="mt-1 border border-gray-300 rounded px-3 py-2"
           />
         </label>
         <label className="flex flex-col text-sm">
           Haslo
           <input
-            type="text"
+            type="password"
             value={haslo}
             onChange={(e) => setHaslo(e.target.value)}
+            required
             className="mt-1 border border-gray-300 rounded px-3 py-2"
           />
         </label>
@@ -52,14 +56,21 @@ export default function Login() {
           disabled={wysylanie}
           className="bg-blue-600 text-white rounded py-2 font-medium hover:bg-blue-700 disabled:opacity-60"
         >
-          Zaloguj
+          {wysylanie ? "Logowanie..." : "Zaloguj"}
         </button>
       </form>
       <p className="text-sm mt-4 text-gray-600">
-        Nie masz konta{" "}
+        Nie masz konta?{" "}
         <Link to="/rejestracja" className="text-blue-600 hover:underline">
           Zarejestruj sie
         </Link>
+      </p>
+      <p className="text-sm mt-2 text-gray-600">
+        Albo{" "}
+        <Link to="/" className="text-blue-600 hover:underline">
+          wroc do publicznej listy salek
+        </Link>
+        .
       </p>
     </div>
   );
