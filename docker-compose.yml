@@ -19,6 +19,19 @@ services:
     networks:
       - pai-net
 
+  adminer:
+    image: adminer:4
+    container_name: pai-adminer
+    restart: unless-stopped
+    profiles: ["debug"]
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - pai-net
+
   backend:
     build:
       context: ./backend
@@ -40,6 +53,24 @@ services:
       - ./backend/alembic:/app/alembic
       - ./backend/alembic.ini:/app/alembic.ini
     command: sh -c "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    networks:
+      - pai-net
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: pai-frontend
+    restart: unless-stopped
+    environment:
+      VITE_API_URL: ${VITE_API_URL}
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/index.html:/app/index.html
+    command: npm run dev -- --host 0.0.0.0
     networks:
       - pai-net
 
