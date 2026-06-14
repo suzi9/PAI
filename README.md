@@ -2,18 +2,6 @@
 
 Aplikacja webowa do rezerwowania salek konferencyjnych w firmie. 
 
-## Spis tresci
-
-- [Realizacja wymagan](#realizacja-wymagan)
-- [Stack technologiczny](#stack-technologiczny)
-- [Model domeny](#model-domeny)
-- [Struktura repozytorium](#struktura-repozytorium)
-- [Uruchomienie](#uruchomienie)
-- [Dane testowe (seed)](#dane-testowe-seed)
-- [Endpointy API](#endpointy-api)
-- [Autentykacja](#autentykacja)
-- [Decyzje architektoniczne (ADR)](#decyzje-architektoniczne-adr)
-
 ## Realizacja wymagan
 
 | ID | Wymaganie | Realizacja |
